@@ -1,0 +1,12 @@
+# Load the required libraries and set options
+library(tidyverse)
+library(janitor)
+library(readr)
+library(tidyr)
+library(chron)
+library(dplyr)
+library(readr)
+library(lubridate)
+library(ggridges)
+library(directlabels)
+options("scipen"=10)
