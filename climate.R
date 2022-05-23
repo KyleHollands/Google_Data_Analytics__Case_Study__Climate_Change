@@ -28,10 +28,30 @@ View(climate_change_metrics)
 # Check for NA's
 sapply(climate_change_metrics, function(x) sum(is.na(x))) # There are no N/A's within the data.
 
-# Drop rows with NA's - In this case, the rows with NA's don't contain any other important metrics.
+# Drop rows with NA's - In this case, the rows with NA's don't contain any other important metrics. 
 climate_change_metrics = na.omit(climate_change_metrics)
 
+# Calculate the difference between the max temperature recorded and the average temperature (by Country)
 climate_change_metrics %>%
-  summarize(min_avg_temp = min(AverageTemperature),
-            max_avg_temp = max(AverageTemperature))
-            
+  group_by(Country) %>%
+  summarize(max(AverageTemperature - mean(AverageTemperature)))
+
+# Calculate the difference between the max temperature recorded and the average temperature (by City)
+climate_change_metrics %>%
+  group_by(City) %>%
+  summarize(max(AverageTemperature - mean(AverageTemperature)))
+
+# Look at which Countries have seen the largest increases.
+top_increases <- climate_change_metrics %>%
+  group_by(Country) %>%
+  summarize(max(AverageTemperature - mean(AverageTemperature)))
+
+# Rename the summarize columns for readability.
+names(top_increases) <- c("Country", "Top Increases")
+
+top_increases %>%
+  filter(`Top Increases` > 10)
+
+View(top_increases)
+
+
