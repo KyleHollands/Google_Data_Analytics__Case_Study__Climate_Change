@@ -26,32 +26,43 @@ str(climate_change_metrics)
 View(climate_change_metrics)
 
 # Check for NA's
-sapply(climate_change_metrics, function(x) sum(is.na(x))) # There are no N/A's within the data.
+sapply(climate_change_metrics, function(x) sum(is.na(x)))
 
 # Drop rows with NA's - In this case, the rows with NA's don't contain any other important metrics. 
-climate_change_metrics = na.omit(climate_change_metrics)
+climate_change_metrics <- na.omit(climate_change_metrics)
+
+# Convert the date column from character to datetime values.
+climate_change_metrics <- climate_change_metrics %>% 
+  mutate(dt = ymd(dt))
+
+# Rename some columns
+names(climate_change_metrics) <- c("Date", "AverageTemperature", "AverageTemperatureUncertainty", "City", "Country", "Latitude", "Longitude")
+
+test <- climate_change_metrics %>% 
+    group_by(Country, year = lubridate::floor_date(Date, "year")) %>%
+    summarize(AvgTemperature = mean(AverageTemperature), AvgTemperatureUncertainty = mean(AverageTemperatureUncertainty))
+
+glimpse(test)
+View(test)
 
 # Calculate the difference between the max temperature recorded and the average temperature (by Country)
 climate_change_metrics %>%
   group_by(Country) %>%
   summarize(max(AverageTemperature - mean(AverageTemperature)))
 
-# Calculate the difference between the max temperature recorded and the average temperature (by City)
 climate_change_metrics %>%
-  group_by(City) %>%
-  summarize(max(AverageTemperature - mean(AverageTemperature)))
+  group_by(Country) %>%
+  summarize(max(AverageTemperatureUncertainty - mean(AverageTemperatureUncertainty)))
 
 # Look at which Countries have seen the largest increases.
-top_increases <- climate_change_metrics %>%
-  group_by(Country) %>%
-  summarize(max(AverageTemperature - mean(AverageTemperature)))
+largest_increase <- climate_change_metrics %>%
+  group_by(Country, Date) %>%
+  summarize(max(Average Temperature - mean(Average Temperature)))
 
-# Rename the summarize columns for readability.
-names(top_increases) <- c("Country", "Top Increases")
+colnames(largest_increase)
+glimpse(largest_increase)
 
-top_increases %>%
-  filter(`Top Increases` > 10)
-
-View(top_increases)
-
+ggplot(climate_change_metrics, aes(x = Date, y = AverageTemperature)) +
+  geom_point() +
+  geom_smooth(span = 0.3)
 
