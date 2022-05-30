@@ -79,4 +79,9 @@ View(largest_increases)
 ggplot(climate_data_condensed_two,
        aes(x = Year)) +
   geom_line(aes(y = AvgTemperature), color = "red") +
-  geom_line(aes(y = AvgTemperatureUncertainty), color = "green", linetype = "twodash")
+  geom_line(aes(y = AvgTemperatureUncertainty), color = "green", linetype = "twodash") +
+  labs(
+    x = "Year",
+    y = "Average Temperature Over Year",
+    title = "Amounts of Lending Club Loans"
+  )
