@@ -39,30 +39,31 @@ climate_data <- climate_data %>%
 # Rename some columns
 names(climate_data) <- c("Date", "AvgTemperature", "AvgTemperatureUncertainty", "City", "Country", "Latitude", "Longitude")
 
-# Condense the data to only years.
+# Condense the data to only years, averaging AvgTemperature and AvgTemperatureUncertainty.
 climate_data_condensed <- climate_data %>% 
     group_by(Country, Year = lubridate::floor_date(Date, "year")) %>%
     summarize(AvgTemperature = mean(AvgTemperature), AvgTemperatureUncertainty = mean(AvgTemperatureUncertainty))
 
 glimpse(climate_data_condensed)
+glimpse(climate_data)
 
 View(climate_data_condensed)
 head(climate_data_condensed)
 tail(climate_data_condensed)
 
 # Acquire only the average temperature per year, for all Countries.
-climate_data_condensed_two <- climate_data_condensed %>%
+climate_data_condensed_year <- climate_data_condensed %>%
   group_by(Year) %>%
   summarize(AvgTemperature = mean(AvgTemperature), AvgTemperatureUncertainty = mean(AvgTemperatureUncertainty))
 
-View(climate_data_condensed_two)
+View(climate_data_condensed_year)
 
 # Calculate the difference between the max AVG temperature recorded per year and the average temperature (by Country)
 (climate_data_condensed %>%
   group_by(Country) %>%
   summarize(AvgTemperature = mean(AvgTemperature), AvgTemperatureUncertainty = mean(AvgTemperatureUncertainty)))
 
-(climate_data_condensed_two %>%
+(climate_data_condensed_year %>%
   group_by(Year) %>%
   summarize(AvgTemperature = mean(AvgTemperature), AvgTemperatureUncertainty = mean(AvgTemperatureUncertainty)))
 
@@ -76,12 +77,14 @@ colnames(largest_increases)
 glimpse(largest_increases)
 View(largest_increases)
 
-ggplot(climate_data_condensed_two,
+ggplot(climate_data_condensed_year,
        aes(x = Year)) +
   geom_line(aes(y = AvgTemperature), color = "red") +
-  geom_line(aes(y = AvgTemperatureUncertainty), color = "green", linetype = "twodash") +
+  geom_line(aes(y = AvgTemperatureUncertainty), color = "green") +
+  geom_smooth(aes(y = AvgTemperature), span = 0.25) +
+  geom_smooth(aes(y = AvgTemperatureUncertainty), span = 0.25) +
   labs(
     x = "Year",
-    y = "Average Temperature Over Year",
-    title = "Amounts of Lending Club Loans"
+    y = "Average Temperature",
+    title = "Average Annual Global Temperature Increase"
   )
