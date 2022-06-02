@@ -70,21 +70,34 @@ View(climate_data_condensed_year)
 # Look at which Countries have seen the largest increases.
 largest_increases <- climate_data_condensed %>%
   group_by(Country) %>%
-  summarize(LargestIncreases = max(AvgTemperature - mean(AvgTemperature)), LargestUncertainties = max(AvgTemperatureUncertainty - mean(AvgTemperatureUncertainty))) %>%
+  summarize(LargestIncreases = max(AvgTemperature - mean(AvgTemperature)), TemperatureUncertainty = max(AvgTemperatureUncertainty - mean(AvgTemperatureUncertainty))) %>%
   filter(LargestIncreases > 3)
 
 colnames(largest_increases)
 glimpse(largest_increases)
 View(largest_increases)
 
+# Plot the global average temperature increase against average temperature uncertainties for the same period.
 ggplot(climate_data_condensed_year,
        aes(x = Year)) +
-  geom_line(aes(y = AvgTemperature), color = "red") +
-  geom_line(aes(y = AvgTemperatureUncertainty), color = "green") +
-  geom_smooth(aes(y = AvgTemperature), span = 0.25) +
-  geom_smooth(aes(y = AvgTemperatureUncertainty), span = 0.25) +
+  geom_line(aes(y = AvgTemperature, color = "AvgTemperature")) +
+  geom_line(aes(y = AvgTemperatureUncertainty, color = "AvgTemperatureUncertainty")) +
+  geom_smooth(aes(y = AvgTemperature), span = 0.175) +
+  geom_smooth(aes(y = AvgTemperatureUncertainty), span = 0.175) +
+  scale_color_manual(values = c(
+    "AvgTemperature" = "red",
+    "AvgTemperatureUncertainty" = "green")) +
+  theme(legend.position = "bottom") +
   labs(
+    color = "Legend",
     x = "Year",
     y = "Average Temperature",
     title = "Average Annual Global Temperature Increase"
   )
+
+# Plot the countries with the largest average temperature increases.
+ggplot(largest_increases, aes(
+  y=Country,
+  fill = LargestIncreases)) +
+  geom_bar()
+
