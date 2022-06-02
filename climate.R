@@ -99,5 +99,11 @@ ggplot(climate_data_condensed_year,
 ggplot(largest_increases, aes(
   y=Country,
   fill = LargestIncreases)) +
-  geom_bar()
+  geom_bar() +
+  labs(
+    color = "Legend",
+    x = "",
+    y = "Country",
+    title = "Largest Average Temperature Increases"
+    )
 
