@@ -71,7 +71,7 @@ View(climate_data_condensed_year)
 largest_increases <- climate_data_condensed %>%
   group_by(Country) %>%
   summarize(LargestIncreases = max(AvgTemperature - mean(AvgTemperature)), TemperatureUncertainty = max(AvgTemperatureUncertainty - mean(AvgTemperatureUncertainty))) %>%
-  filter(LargestIncreases > 3)
+  filter(LargestIncreases > 2.5)
 
 colnames(largest_increases)
 glimpse(largest_increases)
@@ -96,14 +96,14 @@ ggplot(climate_data_condensed_year,
   )
 
 # Plot the countries with the largest average temperature increases.
-ggplot(largest_increases, aes(
-  y=Country,
-  fill = LargestIncreases)) +
-  geom_bar() +
+ggplot(largest_increases, aes(y = Country, x = LargestIncreases)) +
+  geom_col(aes(fill = TemperatureUncertainty)) +
   labs(
-    color = "Legend",
-    x = "",
+    x = "Largest Temperature Increases",
     y = "Country",
-    title = "Largest Average Temperature Increases"
-    )
-
+    title = "Largest Temperature Increases and Uncertainty",
+    caption = "Data collected since 1743"
+    ) +
+    guides(fill=guide_legend("Temp. Change Uncertainty")) +
+    theme_minimal() +
+    theme(legend.position = "bottom")

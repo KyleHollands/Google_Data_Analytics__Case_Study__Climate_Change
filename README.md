@@ -35,3 +35,38 @@ The goal of this analysis is to identify trends or key indicators of climate cha
 > Deliverable
 
 - A clear statement of the business task you have selected to investigate **
+
+## Prepare
+
+> Guiding questions 
+
+- Where is your data located?
+    - The data is stored in OneDrive.
+
+- How is the data organized? 
+    - The data is organized into the following columns: Date, AvgTemperature, AvgTemperatureUncertainty, City, Country, Latitude and Longitude. For the purpose of this analysis, only the Date, AvgTemperature, AvgTemperatureUncertainty and Country will be used.
+
+- Are there issues with bias or credibility in this data? Does your data ROCCC?
+    - The data is from reputable sources, so there is no issue with credibility.
+
+- How are you addressing licensing, privacy, security, and accessibility?
+ 
+- How did you verify the data's integrity?
+
+- How does it help you answer your question?
+
+- Are there any problems with the data?
+
+> Key Tasks
+
+- Download data and store it appropriately.
+
+- Identify how it's organized. 
+
+- Sort and filter the data.
+
+- Determine the credibility of the data. 
+
+> Deliverable 
+
+- A description of all data sources used 
