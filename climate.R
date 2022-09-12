@@ -102,7 +102,7 @@ ggplot(largest_increases, aes(y = Country, x = LargestIncreases)) +
     x = "Largest Temperature Increases",
     y = "Country",
     title = "Largest Temperature Increases and Uncertainty",
-    caption = "Data collected since 1743"
+    subtitle = "Data collected since 1743"
     ) +
     guides(fill=guide_legend("Temp. Change Uncertainty")) +
     theme_minimal() +
